@@ -1,10 +1,18 @@
+"""
+    File: TkTemplate.py
+    Project: Foundation-CompApps
+    Purpose: To provide GUI for the project and the code interface in order to edit, modify and update the GUI
+            for the purposes of the project.
+"""
+
+#-----------------------------------------------------------------
     # ==========================================
     # Required imports - tkinter plus dependencies
     # ==========================================
 
 import tkinter as tk
 
-#import abstracted code/ideas
+#imports abstracted code/ideas
     #E.g. Question handling code
 import Questions
 
@@ -224,6 +232,9 @@ class Q_Page:
         self.A_4.config(text=Ans4_Text)
 
 #-----------------------------------------------------------------
+    # ==========================================
+    # Code Base - Set response when this file is run
+    # ==========================================
 
 if __name__ == "__main__":
     print(f"TKinter Version {tk.TkVersion}")
