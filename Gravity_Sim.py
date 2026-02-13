@@ -15,6 +15,7 @@ import tkinter as tk
 
 #imports area: abstracted code/ideas
 
+
 #-----------------------------------------------------------------
 # ==========================================
 # Class definition - Pages; questions; vars/locations
@@ -24,8 +25,12 @@ class Bean_Can:
     def __init__(self, root):
         self.root = root
         self.root.title("Bean Screen")
-        self.root.geometry("800x600")
-        self.root.resizable(True, True) # Width, Height resizable?
+
+        global width, height
+        width = root.winfo_screenwidth()
+        height = root.winfo_screenheight()
+        self.root.geometry(f"{width}x{height}")
+        self.root.resizable(False, False) # Width, Height resizable?
 
         # Create widgets
         self._create_widgets()
@@ -50,17 +55,17 @@ class Bean_Can:
             relief="groove",
             bd=1
         )
-        self.frame_main.place(x=50, y=100, width=710, height=460)
+        self.frame_main.place(x=50, y=100, width=width, height=height/2)
 
-        # Clear_Ans
-        self.Clear_Ans = tk.Button(
+        # Reset
+        self.Reset = tk.Button(
             self.root,
             text="Clear",
             bg="#f73b3b",
             font=("Courier New", 12),
-            command=self.on_Clear_Ans_click
+            command=self.on_Reset_click
         )
-        self.Clear_Ans.place(x=370, y=450, width=120, height=36)
+        self.Reset.place(x=170, y=50, width=120, height=36) #Adjacent to Quit
 
         # Submit
         self.Submit = tk.Button(
@@ -70,7 +75,7 @@ class Bean_Can:
             font=("Courier New", 12),
             command=self.on_Submit_click
         )
-        self.Submit.place(x=620, y=450, width=120, height=36)
+        self.Submit.place(x=width-170, y=50, width=120, height=36)
 
 #---------------------------------------------------------------
     # ==========================================
@@ -84,9 +89,9 @@ class Bean_Can:
         """
         self.root.destroy()
 
-    def on_Clear_Ans_click(self):
+    def on_Reset_click(self):
         """
-        Handle on_Clear_Ans_click event
+        Handle on_Reset_click event
         TODO: Implement code here
         """
         pass
