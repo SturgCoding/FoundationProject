@@ -55,7 +55,7 @@ class Bean_Can:
             relief="groove",
             bd=1
         )
-        self.frame_main.place(x=50, y=100, width=width, height=height/2)
+        self.frame_main.place(x=50, y=100, width=width, height=height-50-86) # -86 to avoid the buttons, -50 to keep gap from bottom
 
         # Reset
         self.Reset = tk.Button(
