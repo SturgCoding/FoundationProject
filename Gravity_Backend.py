@@ -6,7 +6,7 @@
 
 #-----------------------------------------------------------------
 # ==========================================
-# Required imports - tkinter plus dependencies
+# Required imports - dependencies
 # ==========================================
 
 #dependancy
