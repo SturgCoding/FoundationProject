@@ -14,3 +14,10 @@
 #imports area: abstracted code/ideas
 
 #-----------------------------------------------------------------
+
+def test():
+    print("hi")
+
+if __name__ == "__main__": #Allows for individual testing
+    print(f"Test")
+    test()
