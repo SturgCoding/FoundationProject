@@ -17,7 +17,7 @@ import tkinter as tk
 
 #-----------------------------------------------------------------
 # ==========================================
-# Class definition - Pages; questions; vars/locations
+# Class definition - Page(s)
 # ==========================================
 
 class Bean_Can:
@@ -36,7 +36,7 @@ class Bean_Can:
         # Create widgets
         self._create_widgets()
 
-    def _create_widgets(self, ):
+    def _create_widgets(self):
         """Create and place all widgets"""
 
         # Quit
