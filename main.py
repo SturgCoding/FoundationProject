@@ -1,4 +1,7 @@
-
+#########################################
+# USE auto-py-to-exe TO CREATE .exe file
+# https://pypi.org/project/auto-py-to-exe/
+#########################################
 """
     File: main.py
     Project: Foundation-CompApps
