@@ -1,3 +1,12 @@
+""" 
+    File: gui.py
+    Project: Foundation-CompApps
+    Purpose: Write the pygame window code here, this will be called in main.py
+"""
+
+
+
+
 import pygame
 import pygame.surface
 import pygame_gui

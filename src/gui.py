@@ -1,5 +1,5 @@
 """
-    File: Gravity_Sim.py
+    File: gui.py (old name: Gravity_Sim.py)
     Project: Foundation-CompApps
     Purpose: To provide GUI for the project and the code interface in order to edit, modify and update the GUI
             for the purposes of the project.
