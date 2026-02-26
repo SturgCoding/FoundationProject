@@ -1,4 +1,7 @@
-
+#########################################
+# USE auto-py-to-exe TO CREATE .exe file
+# https://pypi.org/project/auto-py-to-exe/
+#########################################
 """
     File: main.py
     Project: Foundation-CompApps
@@ -6,8 +9,8 @@
 """
 
 import multiprocessing as mp
-import gui
-import physics
+from src import gui
+from src import physics
 
 if __name__ == "__main__":
     # Create processes for GUI and physics engine

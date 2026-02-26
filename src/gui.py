@@ -152,8 +152,11 @@ class Bean_Can:
 # Code Base - Set response when this file is run
 # ==========================================
 
-if __name__ == "__main__":
-    print(f"TKinter Version {tk.TkVersion}")
+def run_gui():
     root = tk.Tk()
     app = Bean_Can(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    print(f"TKinter Version {tk.TkVersion}")
+    run_gui()
