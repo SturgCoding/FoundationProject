@@ -24,22 +24,25 @@ class Bean_Can:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Bean Screen")
+        self.root.title("Bean Value Screen")
 
+        #DO NOT CHANGE VALUES, THIS MAKES IT SMALL YET CLEAR
         global width, height
-        width = root.winfo_screenwidth()
-        height = root.winfo_screenheight()
+        width = 400
+        height = 400
+
+        self.root.minsize(width=width, height=height) #minium size of window is set to 400x400
 
         self.root.geometry(f"{width}x{height}") # Set TK Window to screen size
-        self.root.resizable(False, False) # Width, Height resizable
+        self.root.resizable(True, True) # Width, Height resizable bool
 
         # Create widgets
         self._create_widgets()
 
     def _create_widgets(self):
         """Create and place all widgets"""
-
-        # Quit
+        # Buttons
+            # Quit
         self.Quit = tk.Button(
             self.root,
             text="Quit",
@@ -47,62 +50,8 @@ class Bean_Can:
             font=("Courier New", 12),
             command=self.on_Quit_click
         )
-        self.Quit.place(x=50, y=40, width=120, height=36)
-
-        # frame_1
-        self.frame_main = tk.Frame(
-            self.root,
-            bg="#f3f4f6",
-            relief="groove",
-            bd=1
-        )
-        self.frame_main.place(x=5, y=150, width=width-10, height=height-155)
-
-        # Reset
-        self.Reset = tk.Button(
-            self.root,
-            text="Reset",
-            bg="#f73b3b",
-            font=("Courier New", 12),
-            command=self.on_Reset_click
-        )
-        self.Reset.place(x=170, y=40, width=120, height=36) #Adjacent to Quit
-
-        self.labelVelocity = tk.Label(
-            self.root,
-            font=("Courier New", 12),
-            text="Velocity (m/s)",
-            justify=tk.LEFT, #Keep writing to lefthand side
-        )
-        self.labelVelocity.place(x=300, y=50, width=200, height=25)
-        self.H_Velocity = tk.Scale( # Use H_Velocity.get() to obtain value
-            self.root,
-            from_=0,
-            to=20,
-            orient=tk.HORIZONTAL,
-            resolution=0.1
-        )
-        self.H_Velocity.set(5)
-        self.H_Velocity.place(x=300, y=20, width=width-480, height=36)
-
-        self.labelGravity = tk.Label(
-            self.root,
-            font=("Courier New", 12),
-            text="Gravity (m/s^2)",
-            justify=tk.LEFT, #Keep writing to lefthand side
-        )
-        self.labelGravity.place(x=300, y=105, width=200, height=25)
-        self.Gravity = tk.Scale( # Use Gravity.get() to obtain value
-            self.root,
-            from_=-20,
-            to=20,
-            orient=tk.HORIZONTAL,
-            resolution=0.01
-        )
-        self.Gravity.set(9.81) # Set value to Earth's G as default
-        self.Gravity.place(x=300, y=75, width=width-480, height=36)
-
-        # Submit
+        self.Quit.place(x=width-370, y=height-380, width=120, height=36)
+            # Submit
         self.Submit = tk.Button(
             self.root,
             text="Submit",
@@ -110,17 +59,83 @@ class Bean_Can:
             font=("Courier New", 12),
             command=self.on_Submit_click
         )
-        self.Submit.place(x=width-170, y=40, width=120, height=36)
+        self.Submit.place(x=width-150, y=height-380, width=120, height=36)
+            # Reset
+        self.Reset = tk.Button(
+            self.root,
+            text="Reset",
+            bg="#f73b3b",
+            font=("Courier New", 12),
+            command=self.on_Reset_click
+        )
+        self.Reset.place(x=width-260, y=height-40, width=120, height=36) #Adjacent to Quit
+        #----------------------------------------------------------------
+        # Mass
+        self.mass = tk.IntVar(value=5)
+            # Scale
+        self.Mass = tk.Scale( # Use Mass.get() to obtain value
+            self.root,
+            from_=0.1,
+            to=20,
+            orient=tk.VERTICAL,
+            resolution=0.01,
+            variable=self.mass
+        )
+        self.Mass.place(x=width-275, y=height-340, width=80, height=300)
+            # Text
+        self.M_Text = tk.Label(
+            self.root,
+            text="Mass",
+        )
+        self.M_Text.place(x=width-350, y=height-340, width=80, height=20)
+            # Entry
+        self.M_Entry = tk.Entry(
+            self.root,
+            textvariable=self.mass,
+            font=("Courier New", 12),
+        )
+        self.M_Entry.place(x=width-350, y=height-320, width=80, height=20)
+        #----------------------------------------------------------------
+        # Gravity
+        self.gravity = tk.DoubleVar(value=9.81) # Set value to Earth's G as default
+            #Scale
+        self.Gravity = tk.Scale( # Use Gravity.get() to obtain value
+            self.root,
+            from_=-10,
+            to=20,
+            orient=tk.VERTICAL,
+            resolution=0.01,
+            variable=self.gravity
+        )
+        self.Gravity.place(x=width-215, y=height-340, width=90, height=300)
+            # Text
+        self.G_Text = tk.Label(
+            self.root,
+            text="Gravity",
+        )
+        self.G_Text.place(x=width-130, y=height-340, width=80, height=20)
+            # Entry
+        self.G_Entry = tk.Entry(
+            self.root,
+            textvariable=self.gravity,
+            font=("Courier New", 12),
+        )
+        self.G_Entry.place(x=width-130, y=height-320, width=80, height=20)
 
 #---------------------------------------------------------------
     # ==========================================
     # Event Handlers - Implement event logic
     # ==========================================
 
+        # THESE ARE NEEDED TO RESET AND OBTAIN VALUES
     def set_Gravity_value(self, value):
         self.Gravity.set(value)
-    def set_H_Velocity_value(self, value):
-        self.H_Velocity.set(value)
+    def set_Mass_value(self, value):
+        self.Mass.set(value)
+    def get_Gravity_value(self):
+        return self.Gravity.get()
+    def get_Mass_value(self):
+        return self.Mass.get()
 
     def on_Quit_click(self):
         """
@@ -136,7 +151,7 @@ class Bean_Can:
         TODO: FINISH CODE HERE
         """
         #Reset To Defaults
-        Bean_Can.set_H_Velocity_value(self, 5)
+        Bean_Can.set_Mass_value(self, 5)
         Bean_Can.set_Gravity_value(self,9.81)
         #Reset SIM?
 
@@ -145,7 +160,8 @@ class Bean_Can:
         Handle on_Submit_click event
         TODO: Implement code here
         """
-        pass
+        print(f"Gravity: {self.get_Gravity_value()}")
+        print(f"Mass: {self.get_Mass_value()}")
 
 #-----------------------------------------------------------------
 # ==========================================
