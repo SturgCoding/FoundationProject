@@ -12,14 +12,15 @@
 
 #dependancy
 import tkinter as tk
-
+import customtkinter as ctk
 #imports area: abstracted code/ideas
 
 #-----------------------------------------------------------------
 # ==========================================
 # Class definition - Page(s)
 # ==========================================
-
+width = 400
+height = 400
 class Bean_Can:
 
     def __init__(self, root):
@@ -43,14 +44,19 @@ class Bean_Can:
         """Create and place all widgets"""
         # Buttons
             # Quit
-        self.Quit = tk.Button(
-            self.root,
+        self.Quit = ctk.CTkButton(      #custom designed button 
+            master = self.root,
             text="Quit",
-            bg="#f73b3b",
-            font=("Courier New", 12),
-            command=self.on_Quit_click
+            command=self.on_Quit_click,
+            font=("Courier New", 12, "bold"),
+            border_width = 2,       #new gui designer library
+            border_color= "#000000",
+            fg_color= "#f73b3b",
+            hover_color= "light blue",
+            text_color= "#000000",
+            corner_radius = 10
         )
-        self.Quit.place(x=width-370, y=height-380, width=120, height=36)
+        self.Quit.place(x=width-370, y=height-380)#, width=120, height=36
             # Submit
         self.Submit = tk.Button(
             self.root,
