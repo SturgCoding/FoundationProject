@@ -13,6 +13,8 @@ from src import gui
 from src import physics
 
 if __name__ == "__main__":
+    mp.freeze_support()
+
     # Create processes for GUI and physics engine
     gui_process = mp.Process(target=gui.run_gui)
     physics_process = mp.Process(target=physics.run_physics)

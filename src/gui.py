@@ -79,8 +79,8 @@ class Bean_Can:
             # Scale
         self.Mass = tk.Scale( # Use Mass.get() to obtain value
             self.root,
-            from_=0.1,
-            to=20,
+            from_=0.01,
+            to=100,
             orient=tk.VERTICAL,
             resolution=0.01,
             variable=self.mass
@@ -105,8 +105,8 @@ class Bean_Can:
             #Scale
         self.Gravity = tk.Scale( # Use Gravity.get() to obtain value
             self.root,
-            from_=-10,
-            to=20,
+            from_=-9.81,
+            to=50,
             orient=tk.VERTICAL,
             resolution=0.01,
             variable=self.gravity
@@ -132,6 +132,7 @@ class Bean_Can:
     # ==========================================
 
         # THESE ARE NEEDED TO RESET AND OBTAIN VALUES
+            # CLASSES CAN MAKE OBTAINING VALUES HARD, ESPECIALLY WITH TKINTER, SO GETTERS AND SETTERS SIMPLIFY THIS
     def set_Gravity_value(self, value):
         self.Gravity.set(value)
     def set_Mass_value(self, value):
