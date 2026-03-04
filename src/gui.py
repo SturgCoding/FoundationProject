@@ -19,8 +19,6 @@ import customtkinter as ctk
 # ==========================================
 # Class definition - Page(s)
 # ==========================================
-width = 400
-height = 400
 class Bean_Can:
 
     def __init__(self, root):
