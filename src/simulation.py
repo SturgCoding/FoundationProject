@@ -27,7 +27,12 @@ class BeanCan:
         self.offset_x = 0
         self.offset_y = 0
         self.mass = 1.0
-    
+    def update(self, time_delta):
+        if not self.dragging:
+            self.vy += self.ay * time_delta # v = u + a * t
+            self.rect.y += self.vy * time_delta # s = ut + 0.5 * a * t^2
+            self.rect.x += self.vx * time_delta
+             
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1: # Left mouse button
@@ -53,7 +58,6 @@ class BeanCan:
 
 
 #MAIN LOOP
-running = True
 def run_simulation():
     pygame.init()
 
@@ -70,14 +74,14 @@ def run_simulation():
     #pygame clock
     clock = pygame.time.Clock()    
     bean = BeanCan(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    
+    running = True
     while running:
         time_delta = clock.tick(60) / 1000.0
     
     #event handling
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                break
+                running = False
             
             bean.handle_event(event)
         screen.fill(WHITE)
