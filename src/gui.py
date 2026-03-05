@@ -75,17 +75,27 @@ class Bean_Can:
         self.Reset.place(x=width-260, y=height-40, width=120, height=36) #Adjacent to Quit
         #----------------------------------------------------------------
         # Mass
-        self.mass = tk.IntVar(value=5)
+        self.mass_display = tk.StringVar(value="5.00")
+        self.mass = tk.DoubleVar(value=5)
             # Scale
-        self.Mass = tk.Scale( # Use Mass.get() to obtain value
+        self.Mass = ctk.CTkSlider( # Use Mass.get() to obtain value
             self.root,
             from_=0.01,
             to=100,
-            orient=tk.VERTICAL,
-            resolution=0.01,
-            variable=self.mass
+            orientation = tk.VERTICAL,
+            number_of_steps = 10**15, #to produce less error, this value needs to be big
+            variable = self.mass,
+            command = lambda val1: self.mass_display.set(f"{float(val1):.2f}"), #making it to 2 d.p. with sent value being to ? d.p.
+            fg_color= "light green",
+            border_width = 2,
+            border_color = "#000000",
+            progress_color = "light green",
+            button_color = "green",
+            button_hover_color = "#FFFFFF",
+            width = 15, 
+            height = 290  #the value's resolution depends on height...
         )
-        self.Mass.place(x=width-275, y=height-340, width=80, height=300)
+        self.Mass.place(x=width-230, y=height-340)
             # Text
         self.M_Text = tk.Label(
             self.root,
@@ -93,25 +103,37 @@ class Bean_Can:
         )
         self.M_Text.place(x=width-350, y=height-340, width=80, height=20)
             # Entry
+        self.textvariable = tk.StringVar(value = self.mass)
         self.M_Entry = tk.Entry(
             self.root,
-            textvariable=self.mass,
             font=("Courier New", 12),
+            textvariable = self.mass_display
         )
+        self.M_Entry.bind("<Return>", lambda val2: self.mass.set(float(self.mass_display.get()))) #displaying value, not cut off after 2 d.p.
         self.M_Entry.place(x=width-350, y=height-320, width=80, height=20)
         #----------------------------------------------------------------
         # Gravity
         self.gravity = tk.DoubleVar(value=9.81) # Set value to Earth's G as default
+        self.gravity_display = tk.StringVar(value = "9.81")
             #Scale
-        self.Gravity = tk.Scale( # Use Gravity.get() to obtain value
+        self.Gravity = ctk.CTkSlider( # Use Gravity.get() to obtain value
             self.root,
             from_=-9.81,
             to=50,
-            orient=tk.VERTICAL,
-            resolution=0.01,
-            variable=self.gravity
+            orientation=tk.VERTICAL,
+            number_of_steps = 10**15, #to produce less error, this value needs to be big
+            variable = self.gravity,
+            command = lambda val3: self.gravity_display.set(f"{float(val3):.2f}"), #making it to 2 d.p. with sent value being to ? d.p.
+            fg_color= "light green",
+            border_width = 2,
+            border_color = "#000000",
+            progress_color = "light green",
+            button_color = "green",
+            button_hover_color = "#FFFFFF",
+            width = 15, 
+            height = 290  #the value's resolution depends on height...
         )
-        self.Gravity.place(x=width-215, y=height-340, width=90, height=300)
+        self.Gravity.place(x=width-200, y=height-340) # width=90, height=300
             # Text
         self.G_Text = tk.Label(
             self.root,
@@ -121,9 +143,10 @@ class Bean_Can:
             # Entry
         self.G_Entry = tk.Entry(
             self.root,
-            textvariable=self.gravity,
+            textvariable=self.gravity_display,
             font=("Courier New", 12),
         )
+        self.G_Entry.bind("<Return>", lambda val4: self.gravity.set(float(self.gravity_display.get()))) #displaying value, not cut off after 2 d.p.
         self.G_Entry.place(x=width-130, y=height-320, width=80, height=20)
 
 #---------------------------------------------------------------
@@ -135,8 +158,10 @@ class Bean_Can:
             # CLASSES CAN MAKE OBTAINING VALUES HARD, ESPECIALLY WITH TKINTER, SO GETTERS AND SETTERS SIMPLIFY THIS
     def set_Gravity_value(self, value):
         self.Gravity.set(value)
+        self.gravity_display.set(value)
     def set_Mass_value(self, value):
         self.Mass.set(value)
+        self.mass_display.set(value)
     def get_Gravity_value(self):
         return self.Gravity.get()
     def get_Mass_value(self):
