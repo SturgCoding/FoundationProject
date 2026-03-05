@@ -11,20 +11,7 @@ import pygame
 
 import sys
   
-pygame.init()
 
-info = pygame.display.Info()
-SCREEN_WIDTH, SCREEN_HEIGHT = info.current_w, info.current_h
-
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT - 50))
-pygame.display.set_caption("gravity sim")
-
-#colours
-WHITE = (255, 255, 255)
-RED = (255, 50, 50)
-
-#pygame clock
-clock = pygame.time.Clock()
 
 
 
@@ -62,26 +49,43 @@ class BeanCan:
         surface.blit(self.image, self.rect)
 
 #load the bean can
-bean = BeanCan(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+
 
 
 #MAIN LOOP
 running = True
-while running:
-    time_delta = clock.tick(60) / 1000.0
-   
-   #event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        
-        bean.handle_event(event)
-    screen.fill(WHITE)
-    bean.draw(screen)
-    pygame.display.flip()
+def run_simulation():
+    pygame.init()
 
-pygame.quit()
-sys.exit()
+    info = pygame.display.Info()
+    SCREEN_WIDTH, SCREEN_HEIGHT = info.current_w, info.current_h
+
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT - 50))
+    pygame.display.set_caption("gravity sim")
+
+    #colours
+    WHITE = (255, 255, 255)
+    RED = (255, 50, 50)
+
+    #pygame clock
+    clock = pygame.time.Clock()    
+    bean = BeanCan(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    
+    while running:
+        time_delta = clock.tick(60) / 1000.0
+    
+    #event handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                break
+            
+            bean.handle_event(event)
+        screen.fill(WHITE)
+        bean.draw(screen)
+        pygame.display.flip()
+    pygame.quit()
+    sys.exit()
+
 
 
 

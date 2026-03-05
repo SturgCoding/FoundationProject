@@ -11,18 +11,19 @@
 import multiprocessing as mp
 from src import gui
 from src import physics
+from src import simulation
 
 if __name__ == "__main__":
     mp.freeze_support()
 
     # Create processes for GUI and physics engine
     gui_process = mp.Process(target=gui.run_gui)
-    physics_process = mp.Process(target=physics.run_physics)
+    simulation_process = mp.Process(target=simulation.run_simulation)
 
     # Start the processes
     gui_process.start()
-    physics_process.start()
+    simulation_process.start()
 
     # Wait for both processes to finish
     gui_process.join()
-    physics_process.join()
+    simulation_process.join()
