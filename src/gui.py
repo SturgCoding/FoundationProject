@@ -162,10 +162,11 @@ class Bean_Can:
     def set_Mass_value(self, value):
         self.Mass.set(value)
         self.mass_display.set(value)
+
     def get_Gravity_value(self):
-        return self.Gravity.get()
+        return round(self.Gravity.get(), 2) # Round obtained values to 2dp
     def get_Mass_value(self):
-        return self.Mass.get()
+        return round(self.Mass.get(), 2)
 
     def on_Quit_click(self):
         """

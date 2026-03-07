@@ -3,18 +3,9 @@
     Project: Foundation-CompApps
     Purpose: Write the pygame window code here, this will be called in main.py
 """
-
-
-
-
 import pygame
 
 import sys
-  
-
-
-
-
 
 class BeanCan:
     def __init__(self,x ,y):
