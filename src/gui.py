@@ -109,7 +109,18 @@ class Bean_Can:
             font=("Courier New", 12),
             textvariable = self.mass_display
         )
-        self.M_Entry.bind("<Return>", lambda val2: self.mass.set(float(self.mass_display.get()))) #displaying value, not cut off after 2 d.p.
+        def mass_displayed(event):
+            val2 = float(self.mass_display.get())
+            min_val = self.Mass.cget("from_")
+            max_val = self.Mass.cget("to")
+            if val2 > max_val:
+                val2 = max_val
+            elif val2 < min_val:
+                val2 = min_val
+            self.mass.set(val2)
+            self.mass_display.set(f"{float(val2):.2f}")
+            
+        self.M_Entry.bind("<Return>", mass_displayed) #displaying value, not cut off after 2 d.p.
         self.M_Entry.place(x=width-350, y=height-320, width=80, height=20)
         #----------------------------------------------------------------
         # Gravity
@@ -146,7 +157,17 @@ class Bean_Can:
             textvariable=self.gravity_display,
             font=("Courier New", 12),
         )
-        self.G_Entry.bind("<Return>", lambda val4: self.gravity.set(float(self.gravity_display.get()))) #displaying value, not cut off after 2 d.p.
+        def gravity_displayed(event):
+            val4 = float(self.gravity_display.get())
+            min_val = self.Gravity.cget("from_")
+            max_val = self.Gravity.cget("to")
+            if val4 > max_val:
+                val4 = max_val
+            elif val4 < min_val:
+                val4 = min_val
+            self.gravity.set(val4)
+            self.gravity_display.set(f"{float(val4):.2f}")
+        self.G_Entry.bind("<Return>", gravity_displayed) #displaying value, not cut off after 2 d.p.
         self.G_Entry.place(x=width-130, y=height-320, width=80, height=20)
 
 #---------------------------------------------------------------
