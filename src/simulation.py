@@ -1,5 +1,5 @@
 """ 
-    File: gui.py
+    File: simulation.py
     Project: Foundation-CompApps
     Purpose: Write the pygame window code here, this will be called in main.py
 """
@@ -10,7 +10,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 from physics import PhysicsBody, PIXELS_PER_METER
-
 
 class BeanCan:
     def __init__(self, x, y, screen_width, screen_height):
@@ -101,8 +100,6 @@ class BeanCan:
         surface.blit(self.image, self.rect)
     #load the bean can
 
-
-
 #MAIN LOOP
 def run_simulation():
     pygame.init()
@@ -137,7 +134,7 @@ def run_simulation():
 
         screen.fill(WHITE)
         bean.draw(screen)
-        pygame.display.flip()
+        pygame.display.flip() # Update to changes
 
     pygame.quit()
     sys.exit()
