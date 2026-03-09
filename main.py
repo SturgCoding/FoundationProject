@@ -16,9 +16,11 @@ from src import simulation
 if __name__ == "__main__":
     mp.freeze_support()
 
-    # Create processes for GUI and physics engine
-    gui_process = mp.Process(target=gui.run_gui)
-    simulation_process = mp.Process(target=simulation.run_simulation)
+    settings_queue = mp.Queue()  # pipe for tkinter → pygame (gravity, mass values)
+
+    # Create processes for GUI and physics engine, sharing the queue
+    gui_process = mp.Process(target=gui.run_gui, args=(settings_queue,))
+    simulation_process = mp.Process(target=simulation.run_simulation, args=(settings_queue,))
 
     # Start the processes
     gui_process.start()

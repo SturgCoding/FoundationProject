@@ -5,23 +5,14 @@
             for the purposes of the project.
 """
 
-#-----------------------------------------------------------------
-# ==========================================
-# Required imports - tkinter plus dependencies
-# ==========================================
 
-#dependancy
 import tkinter as tk
 import customtkinter as ctk
-#imports area: abstracted code/ideas
+import multiprocessing as mp
 
-#-----------------------------------------------------------------
-# ==========================================
-# Class definition - Page(s)
-# ==========================================
 class Bean_Can:
-
-    def __init__(self, root):
+    def __init__(self, root, queue = None):
+        self.queue = queue
         self.root = root
         self.root.title("Bean Value Screen")
 
@@ -208,23 +199,24 @@ class Bean_Can:
         #Reset SIM?
 
     def on_Submit_click(self):
-        """
-        Handle on_Submit_click event
-        TODO: Implement code here
-        """
         print(f"Gravity: {self.get_Gravity_value()}")
         print(f"Mass: {self.get_Mass_value()}")
-
+        if self.queue:
+            self.queue.put({
+                'gravity': self.get_Gravity_value(),
+                'mass': self.get_Mass_value()
+            })
 #-----------------------------------------------------------------
 # ==========================================
 # Code Base - Set response when this file is run
 # ==========================================
 
-def run_gui():
+def run_gui(queue=None):
+    # queue is passed in from main.py so tkinter can send values to the simulation
     root = tk.Tk()
-    app = Bean_Can(root)
+    app = Bean_Can(root, queue=queue)
     root.mainloop()
 
 if __name__ == "__main__":
-    print(f"TKinter Version {tk.TkVersion}")
-    run_gui()
+    run_gui()  # run standalone with no queue (for testing gui.py on its own)
+
