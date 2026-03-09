@@ -3,10 +3,11 @@
     Project: Foundation-CompApps
     Purpose: Write the pygame window code here, this will be called in main.py
 """
-import pygame
+
 import os
 import sys
-
+import math
+import pygame
 
 sys.path.insert(0, os.path.dirname(__file__))
 from physics import PhysicsBody, PIXELS_PER_METER
@@ -30,10 +31,11 @@ class BeanCan:
         self.offset_x = 0
         self.offset_y = 0
 
-        # We track the last mouse position + time so we can calculate
-        # how fast the mouse was moving when the user lets go (throw velocity)
-        self._prev_mouse_pos  = (float(x), float(y))
-        self._prev_mouse_time = pygame.time.get_ticks() / 1000.0
+        #on every mouse event while dragging
+        self._prev_mouse_pos  = (float(x), float(y)) #save the position
+        self._prev_mouse_time = pygame.time.get_ticks() / 1000.0 #save the time
+
+        
 
     def update(self, dt):
         if self.dragging:
@@ -69,8 +71,9 @@ class BeanCan:
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1 and self.dragging:
                 self.dragging = False
-                now     = pygame.time.get_ticks() / 1000.0
+                now = pygame.time.get_ticks() / 1000.0
                 elapsed = now - self._prev_mouse_time
+
 
                 if elapsed > 0:
                     # Work out how fast the mouse was moving in pixels/second
@@ -99,6 +102,63 @@ class BeanCan:
     def draw(self, surface):
         surface.blit(self.image, self.rect)
     #load the bean can
+
+
+def draw_arrow(surface, colour, start, end, width = 2, head = 10):
+    pygame.draw.line(surface, colour, start, end, width)
+
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    length = math.hypot(dx, dy)
+    if length < 0.5:
+        return  # too short(and eliminating division by 0)
+
+    # unit vector pointing in the direction of the arrow
+    ux = dx / length
+    uy = dy / length
+
+    # Two points that make the arrowhead triangle (perpendicular to the line)
+    p1 = (end[0] - head * ux + head * 0.4 * uy,
+          end[1] - head * uy - head * 0.4 * ux)
+    p2 = (end[0] - head * ux - head * 0.4 * uy,
+          end[1] - head * uy + head * 0.4 * ux)
+
+    pygame.draw.polygon(surface, colour, [end, p1, p2])
+
+def draw_velocity_vector(surface, bean_can):
+    """
+    Draw the three SUVAT velocity vectors on screen:
+      - Blue  = horizontal component (vx)
+      - Red   = vertical component   (vy)
+      - Yellow = resultant speed      (v)
+    """
+    if not bean_can.physics.in_flight:
+        return  # only draw when in the air
+    
+    cx = bean_can.rect.centerx
+    cy = bean_can.rect.centery
+    SCALE = 8  # how many pixels per m/s for the velocity vectors(bigger/smaller arrows)
+    
+    vx = bean_can.physics.vx#m/s positive = right negative = left
+    vy = bean_can.physics.vy#m/s positive = DOWN(PYGAME STUFF)
+
+#horizontal arrow(velocity)
+    if abs(vx) > 0.1:
+        draw_arrow(surface, (80, 120, 255),
+                     (cx, cy),
+                     (cx + vx * SCALE, cy),
+                     width=3, head=12)
+#vertical arrow(velocity)
+    if abs(vy) > 0.1:
+        draw_arrow(surface, (255,80, 80),
+                     (cx, cy),
+                     (cx, int(cy + vy * SCALE)))
+        
+    if math.hypot(vx, vy) > 0.1:
+        draw_arrow(surface, (255, 220, 60),
+                     (cx, cy),
+                     (int(cx + vx * SCALE), int(cy + vy * SCALE)))
+
 
 #MAIN LOOP
 def run_simulation():
@@ -134,7 +194,8 @@ def run_simulation():
 
         screen.fill(WHITE)
         bean.draw(screen)
-        pygame.display.flip() # Update to changes
+        draw_velocity_vector(screen, bean)
+        pygame.display.flip()
 
     pygame.quit()
     sys.exit()
