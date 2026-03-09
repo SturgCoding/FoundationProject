@@ -164,12 +164,13 @@ def draw_velocity_vector(surface, bean_can):
 def run_simulation():
     pygame.init()
 
-    info = pygame.display.Info()
-    SCREEN_WIDTH  = info.current_w
-    SCREEN_HEIGHT = info.current_h - 50
+    SCREEN_WIDTH  = 800
+    SCREEN_HEIGHT = 600
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("gravity sim")
+    icon = pygame.image.load("assets/bean_can.png").convert_alpha()
+    pygame.display.set_icon(icon)
 
     WHITE = (255, 255, 255)
     clock = pygame.time.Clock()
