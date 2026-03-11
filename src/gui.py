@@ -25,7 +25,7 @@ class Bean_Can:
 
         self.root.geometry(f"{width}x{height}") # Set TK Window to screen size
         self.root.resizable(True, True) # Width, Height resizable bool
-
+        self.root.update_idletasks()
         # Create widgets
         self._create_widgets()
 
@@ -43,27 +43,43 @@ class Bean_Can:
             fg_color= "#f73b3b",
             hover_color= "light blue",
             text_color= "#000000",
-            corner_radius = 10
+            corner_radius = 10,
+            width = 120,
+            height = 24
         )
-        self.Quit.place(x=width-370, y=height-380)#, width=120, height=36
+        self.Quit.place(x=width-390, y=height-60)#, width=120, height=36
             # Submit
-        self.Submit = tk.Button(
-            self.root,
+        self.Submit = ctk.CTkButton(
+            master = self.root,
             text="Submit",
-            bg="#8ddb62",
             font=("Courier New", 12),
-            command=self.on_Submit_click
+            command=self.on_Submit_click,
+            border_width = 1.5,       #new gui designer library
+            border_color= "#000000",
+            fg_color= "#4ef73b",
+            hover_color= "light blue",
+            text_color= "#000000",
+            corner_radius = 10,
+            width=120,
+            height=24
         )
-        self.Submit.place(x=width-150, y=height-380, width=120, height=36)
+        self.Submit.place(x=width-130, y=height-60) #width=120, height=36
             # Reset
-        self.Reset = tk.Button(
-            self.root,
+        self.Reset = ctk.CTkButton(
+            master = self.root,
             text="Reset",
-            bg="#f73b3b",
+            fg_color="#f73b3b",
             font=("Courier New", 12),
-            command=self.on_Reset_click
+            command=self.on_Reset_click,
+            border_width = 2,       #new gui designer library
+            border_color= "#000000",
+            hover_color= "light blue",
+            text_color= "#000000",
+            corner_radius = 10,
+            width= 120,
+            height = 24
         )
-        self.Reset.place(x=width-260, y=height-40, width=120, height=36) #Adjacent to Quit
+        self.Reset.place(x=width-260, y=height-60) #Adjacent to Quit    , width=120, height=36
         #----------------------------------------------------------------
         # Mass
         self.mass_display = tk.StringVar(value="5.00")
@@ -83,22 +99,41 @@ class Bean_Can:
             progress_color = "light green",
             button_color = "green",
             button_hover_color = "#FFFFFF",
-            width = 15, 
-            height = 290  #the value's resolution depends on height...
+            button_length=12,
+            width = 12, 
+            height = self.root.winfo_height() - 110 #the value's resolution depends on height...
         )
-        self.Mass.place(x=width-230, y=height-340)
+        self.Mass.place(x=width/2 -20, y=height-380)
             # Text
-        self.M_Text = tk.Label(
+        self.M_Text = ctk.CTkLabel(
             self.root,
             text="Mass",
+            font=("Ariel", 20),
+            width=80, 
+            height=20,
+            fg_color= "transparent",
+            corner_radius= 5,
+            text_color= "#000000",
+            justify = "center",
+            anchor = "center"
         )
-        self.M_Text.place(x=width-350, y=height-340, width=80, height=20)
+        self.M_Text.place(x=width-350, y=height-380)
             # Entry
         self.textvariable = tk.StringVar(value = self.mass)
-        self.M_Entry = tk.Entry(
+        self.M_Entry = ctk.CTkEntry(
             self.root,
             font=("Courier New", 12),
-            textvariable = self.mass_display
+            textvariable = self.mass_display,
+            width=80, 
+            height=24,
+            corner_radius= 5,
+            placeholder_text= "Enter your value",
+            placeholder_text_color="#6C6C6C",
+            fg_color="#ffffff",
+            text_color="#000000",
+            border_width= 2,
+            border_color= "#000000",
+            justify = "center"
         )
         def mass_displayed(event):
             val2 = float(self.mass_display.get())
@@ -112,7 +147,7 @@ class Bean_Can:
             self.mass_display.set(f"{float(val2):.2f}")
             
         self.M_Entry.bind("<Return>", mass_displayed) #displaying value, not cut off after 2 d.p.
-        self.M_Entry.place(x=width-350, y=height-320, width=80, height=20)
+        self.M_Entry.place(x=width-350, y=height-340)
         #----------------------------------------------------------------
         # Gravity
         self.gravity = tk.DoubleVar(value=9.81) # Set value to Earth's G as default
@@ -132,21 +167,40 @@ class Bean_Can:
             progress_color = "light green",
             button_color = "green",
             button_hover_color = "#FFFFFF",
-            width = 15, 
-            height = 290  #the value's resolution depends on height...
+            button_length=12,
+            width = 12, 
+            height = self.root.winfo_height() - 110  #the value's resolution depends on height...
         )
-        self.Gravity.place(x=width-200, y=height-340) # width=90, height=300
+        self.Gravity.place(x=width/2 + 20, y=height-380) # width=90, height=300
             # Text
-        self.G_Text = tk.Label(
+        self.G_Text = ctk.CTkLabel(
             self.root,
             text="Gravity",
+            font=("Ariel", 20),
+            width=80, 
+            height=20,
+            fg_color= "transparent",
+            corner_radius= 5,
+            text_color= "#000000",
+            justify = "center",
+            anchor = "center"
         )
-        self.G_Text.place(x=width-130, y=height-340, width=80, height=20)
+        self.G_Text.place(x=width-130, y=height-380)
             # Entry
-        self.G_Entry = tk.Entry(
+        self.G_Entry = ctk.CTkEntry(
             self.root,
             textvariable=self.gravity_display,
             font=("Courier New", 12),
+            width=80, 
+            height=24,
+            corner_radius= 5,
+            placeholder_text= "Enter your value",
+            placeholder_text_color="#6C6C6C",
+            fg_color="#ffffff",
+            text_color="#000000",
+            border_width= 2,
+            border_color= "#000000",
+            justify = "center"
         )
         def gravity_displayed(event):
             val4 = float(self.gravity_display.get())
@@ -159,7 +213,7 @@ class Bean_Can:
             self.gravity.set(val4)
             self.gravity_display.set(f"{float(val4):.2f}")
         self.G_Entry.bind("<Return>", gravity_displayed) #displaying value, not cut off after 2 d.p.
-        self.G_Entry.place(x=width-130, y=height-320, width=80, height=20)
+        self.G_Entry.place(x=width-130, y=height-340)
 
 #---------------------------------------------------------------
     # ==========================================
@@ -194,7 +248,7 @@ class Bean_Can:
         TODO: FINISH CODE HERE
         """
         #Reset To Defaults
-        Bean_Can.set_Mass_value(self, 5)
+        Bean_Can.set_Mass_value(self, 5.00)
         Bean_Can.set_Gravity_value(self,9.81)
         #Reset SIM?
 
