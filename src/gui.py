@@ -92,7 +92,7 @@ class Bean_Can:
             orientation = tk.VERTICAL,
             number_of_steps = 10**15, #to produce less error, this value needs to be big
             variable = self.mass,
-            command = lambda val1: self.mass_display.set(f"{float(val1):.2f}"), #making it to 2 d.p. with sent value being to ? d.p.
+            command = lambda val1: self.mass_display.set(f"{float(val1):.2f}"), #to not make new def function, lambda was used, as it can be used for 1 line def functions. val 1 just extracts the value of slider, and we put it in the entry for mass, making it to 2 d.p. with sent value being to ? d.p.
             fg_color= "light green",
             border_width = 2,
             border_color = "#000000",
@@ -160,7 +160,7 @@ class Bean_Can:
             orientation=tk.VERTICAL,
             number_of_steps = 10**15, #to produce less error, this value needs to be big
             variable = self.gravity,
-            command = lambda val3: self.gravity_display.set(f"{float(val3):.2f}"), #making it to 2 d.p. with sent value being to ? d.p.
+            command = lambda val3: self.gravity_display.set(f"{float(val3):.2f}"), #to not make new def function, lambda was used, as it can be used for 1 line def functions. val 3 just extracts the value of slider, and we put it in the entry for gravity, making it to 2 d.p. with sent value being to ? d.p.
             fg_color= "light green",
             border_width = 2,
             border_color = "#000000",
