@@ -9,6 +9,10 @@
 import tkinter as tk
 import customtkinter as ctk
 import multiprocessing as mp
+import sys 
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+import simulation
 
 class Bean_Can:
     def __init__(self, root, queue = None):
@@ -250,6 +254,8 @@ class Bean_Can:
         #Reset To Defaults
         Bean_Can.set_Mass_value(self, 5.00)
         Bean_Can.set_Gravity_value(self,9.81)
+        #Sending queue to the simulator that will be detected by it.
+        self.queue.put({'reset': True})
         #Reset SIM?
 
     def on_Submit_click(self):

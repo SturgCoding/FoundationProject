@@ -13,6 +13,9 @@ sys.path.insert(0, os.path.dirname(__file__))  # lets Python find physics.py ins
 from physics import PhysicsBody, PIXELS_PER_METER
 
 
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
 class BeanCan:
     def __init__(self, x, y, screen_width, screen_height):
         self.original_image = pygame.image.load("assets/bean_can.png").convert_alpha()
@@ -42,6 +45,7 @@ class BeanCan:
         self.physics.update(dt)  # run SUVAT for this frame
 
         # --- Floor collision ---
+        global ground_y
         ground_y = self.screen_height - self.rect.height
         if self.physics.y >= ground_y and self.physics.in_flight:
             self.physics.bounce(ground_y)
@@ -71,38 +75,45 @@ class BeanCan:
             if event.button == 1 and self.dragging:
                 self.dragging = False
                 now = pygame.time.get_ticks() / 1000.0
+                start = now
 
                 vx_px, vy_px = 0.0, 0.0
                 # Walk backwards to find a sample >= 50ms old.
                 # Using just the last frame gives elapsed~=0 (same tick) → no velocity.
-                for pos, t in reversed(self._pos_history):
-                    elapsed = now - t
-                    if elapsed >= 0.05:
-                        vx_px = (event.pos[0] - pos[0]) / elapsed
-                        vy_px = (event.pos[1] - pos[1]) / elapsed
-                        break
-                else:
-                    if self._pos_history:
-                        pos, t = self._pos_history[0]
+                """I tried fixing michael jakson issue. It didn't work out yet, but code still works."""
+                if self.physics.grounded != True:
+                    for pos, t in reversed(self._pos_history):
                         elapsed = now - t
-                        if elapsed > 0.001:
+                        if elapsed >= 0.05:
                             vx_px = (event.pos[0] - pos[0]) / elapsed
                             vy_px = (event.pos[1] - pos[1]) / elapsed
-
-                self.physics.release(
+                            break
+                    else:
+                        if self._pos_history:
+                            pos, t = self._pos_history[0]
+                            elapsed = now - t
+                            if elapsed > 0.001:
+                                vx_px = (event.pos[0] - pos[0]) / elapsed
+                                vy_px = (event.pos[1] - pos[1]) / elapsed
+                    self.physics.release(
                     vx_ms=vx_px / PIXELS_PER_METER,
                     vy_ms=vy_px / PIXELS_PER_METER,
-                )
+                    )
+                    if self.physics.y == ground_y and self.physics.vy == 0:
+                        time_used = pygame.time.get_ticks()/1000 - start
+                        print(time_used)
+                
         elif event.type == pygame.MOUSEMOTION:
-            if self.dragging:
-                self.rect.x = event.pos[0] + self.offset_x
-                self.rect.y = event.pos[1] + self.offset_y
-                self.physics.x = float(self.rect.x)
-                self.physics.y = float(self.rect.y)
-                # Record position snapshot for throw velocity estimation
-                self._pos_history.append((event.pos, pygame.time.get_ticks() / 1000.0))
-                if len(self._pos_history) > 15:
-                    self._pos_history.pop(0)
+            if self.physics.grounded != True:
+                if self.dragging:
+                    self.rect.x = event.pos[0] + self.offset_x
+                    self.rect.y = event.pos[1] + self.offset_y
+                    self.physics.x = float(self.rect.x)
+                    self.physics.y = float(self.rect.y)
+                    # Record position snapshot for throw velocity estimation
+                    self._pos_history.append((event.pos, pygame.time.get_ticks() / 1000.0))
+                    if len(self._pos_history) > 15:
+                        self._pos_history.pop(0)
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -182,12 +193,25 @@ def run_simulation(queue=None):
     clock = pygame.time.Clock()
 
     # Pass screen size into BeanCan so it knows where the floor/walls are
+    global bean
     bean = BeanCan(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                    SCREEN_WIDTH, SCREEN_HEIGHT)
-
     # Start it falling immediately (u=0 means dropped from rest)
     bean.physics.release(vx_ms=0.0, vy_ms=0.0)
+    #defining properties of reseted bean can
+    def reset_bean():
+        # Move it back to screen center
+        bean.rect.centerx = SCREEN_WIDTH // 2
+        bean.rect.centery = SCREEN_HEIGHT // 2
 
+        bean.physics.x = float(bean.rect.x)
+        bean.physics.y = float(bean.rect.y)
+
+        # Stop movement of bean can and putting it on the ground
+        bean.physics.vx = 0
+        bean.physics.vy = 0
+        bean.physics.in_flight = False
+        bean.physics.grounded = True
     running = True
     while running:
         dt = clock.tick(60) / 1000.0  # seconds since last frame
@@ -195,6 +219,9 @@ def run_simulation(queue=None):
         if queue:
             try:
                 settings = queue.get_nowait()
+                #Checking for reset message
+                if settings.get('reset'):
+                    reset_bean()
                 new_gravity = settings.get('gravity', bean.physics.ay)
                 if new_gravity != bean.physics.ay:
                     bean.physics.ay = new_gravity

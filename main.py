@@ -12,6 +12,7 @@ import multiprocessing as mp
 from src import gui
 from src import physics
 from src import simulation
+import time
 
 if __name__ == "__main__":
     mp.freeze_support()
@@ -26,6 +27,15 @@ if __name__ == "__main__":
     gui_process.start()
     simulation_process.start()
 
+    #close both apps simultaniously
+    while True:
+        if not gui_process.is_alive():
+            simulation_process.terminate()
+            break
+        elif not simulation_process.is_alive():
+            gui_process.terminate()
+            break
+        time.sleep(0.1)
     # Wait for both processes to finish
     gui_process.join()
     simulation_process.join()
