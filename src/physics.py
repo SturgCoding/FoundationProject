@@ -1,4 +1,3 @@
-#-----------------------------------------------------------------
 # ==========================================
 # Code Base - Set response when this file is run
 # ==========================================
@@ -82,10 +81,11 @@ class PhysicsBody:
             return
         self.release(vx_ms = self.vx, vy_ms = new_vy) #relaunch with the new velocities
 
+#-----------------------------------------------------------------
 
 def run_physics():
     pass
-
+#-----------------------------------------------------------------
 if __name__ == "__main__":
     run_physics()
 
