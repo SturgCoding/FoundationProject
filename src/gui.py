@@ -9,10 +9,6 @@
 import tkinter as tk
 import customtkinter as ctk
 import multiprocessing as mp
-import sys 
-import os
-sys.path.insert(0, os.path.dirname(__file__))
-import simulation
 
 class Bean_Can:
     def __init__(self, root, queue = None):
