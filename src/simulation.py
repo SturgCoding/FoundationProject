@@ -176,6 +176,25 @@ def draw_velocity_vector(surface, bean_can):
                      (int(cx + vx * SCALE), int(cy + vy * SCALE)))
 
 
+def draw_suvat_overlay(surface, font, physics):
+    """
+    Draw real-time SUVAT values as a text overlay.
+    """
+    lines = [
+        "--- SUVAT ---",
+        f"Time (t): {physics.t:.2f} s",
+        f"Disp (s): x={physics.sx:.2f}m, y={physics.sy:.2f}m",
+        f"Init Vel (u): x={physics.ux:.2f}m/s, y={physics.uy:.2f}m/s",
+        f"Final Vel (v): x={physics.vx:.2f}m/s, y={physics.vy:.2f}m/s",
+        f"Accel (a): x={physics.ax:.2f}m/s², y={physics.ay:.2f}m/s²",
+    ]
+    
+    y = 10
+    for line in lines:
+        text_surface = font.render(line, True, (0, 0, 0))
+        surface.blit(text_surface, (10, y))
+        y += 25
+
 #MAIN LOOP
 def run_simulation(queue=None):
     # queue receives gravity/mass updates from the tkinter window
@@ -191,6 +210,7 @@ def run_simulation(queue=None):
 
     WHITE = (255, 255, 255)
     clock = pygame.time.Clock()
+    font = pygame.font.SysFont("consolas", 14)
 
     # Pass screen size into BeanCan so it knows where the floor/walls are
     global bean
@@ -241,6 +261,7 @@ def run_simulation(queue=None):
         screen.fill(WHITE)
         bean.draw(screen)
         draw_velocity_vector(screen, bean)
+        draw_suvat_overlay(screen, font, bean.physics)
         pygame.display.flip()
 
     pygame.quit()
