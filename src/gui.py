@@ -136,7 +136,10 @@ class Bean_Can:
             justify = "center"
         )
         def mass_displayed(event):
-            val2 = float(self.mass_display.get())
+            try:
+                val2 = float(self.mass_display.get())
+            except ValueError:
+                val2 = self.mass.get()  #tries whether it is number or not
             min_val = self.Mass.cget("from_")
             max_val = self.Mass.cget("to")
             if val2 > max_val:
@@ -203,7 +206,10 @@ class Bean_Can:
             justify = "center"
         )
         def gravity_displayed(event):
-            val4 = float(self.gravity_display.get())
+            try:
+                val4 = float(self.gravity_display.get())
+            except ValueError:
+                val4 = self.gravity.get()
             min_val = self.Gravity.cget("from_")
             max_val = self.Gravity.cget("to")
             if val4 > max_val:
@@ -225,9 +231,11 @@ class Bean_Can:
     def set_Gravity_value(self, value):
         self.Gravity.set(value)
         self.gravity_display.set(value)
+        self.gravity.set(value)
     def set_Mass_value(self, value):
         self.Mass.set(value)
         self.mass_display.set(value)
+        self.mass.set(value)
 
     def get_Gravity_value(self):
         return round(self.Gravity.get(), 2) # Round obtained values to 2dp
