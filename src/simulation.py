@@ -121,6 +121,7 @@ class BeanCan:
 
 
 def draw_arrow(surface, colour, start, end, width = 2, head = 10):
+    if width <= 0: return
     pygame.draw.line(surface, colour, start, end, width)
 
     dx = end[0] - start[0]
@@ -139,7 +140,9 @@ def draw_arrow(surface, colour, start, end, width = 2, head = 10):
     p2 = (end[0] - head * ux - head * 0.4 * uy,
           end[1] - head * uy + head * 0.4 * ux)
 
+    # Use anti-aliased polygon for smoother arrow tips
     pygame.draw.polygon(surface, colour, [end, p1, p2])
+    pygame.draw.aalines(surface, colour, True, [end, p1, p2])
 
 def draw_velocity_vector(surface, bean_can):
     """
@@ -178,7 +181,7 @@ def draw_velocity_vector(surface, bean_can):
 
 def draw_suvat_overlay(surface, font, physics):
     """
-    Draw real-time SUVAT values as a text overlay.
+    Draw real-time SUVAT values as a text overlay inside a professional semi-transparent panel.
     """
     lines = [
         "--- SUVAT ---",
@@ -189,11 +192,49 @@ def draw_suvat_overlay(surface, font, physics):
         f"Accel (a): x={physics.ax:.2f}m/s², y={physics.ay:.2f}m/s²",
     ]
     
-    y = 10
+    # Measure text block size
+    max_w = 0
+    total_h = 0
+    text_surfs = []
+    
     for line in lines:
-        text_surface = font.render(line, True, (0, 0, 0))
-        surface.blit(text_surface, (10, y))
+        text_surf = font.render(line, True, (240, 240, 245))
+        text_surfs.append(text_surf)
+        max_w = max(max_w, text_surf.get_width())
+        total_h += 25
+        
+    pad = 15
+    rect = pygame.Rect(10, 10, max_w + pad*2, total_h + pad)
+    
+    # Draw semi-transparent panel
+    overlay = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
+    pygame.draw.rect(overlay, (30, 35, 45, 200), overlay.get_rect(), border_radius=8)
+    surface.blit(overlay, (rect.x, rect.y))
+    
+    y = rect.y + pad
+    for text_surf in text_surfs:
+        surface.blit(text_surf, (rect.x + pad, y))
         y += 25
+
+def draw_background(surface, width, height):
+    """Draw a smooth gradient and a professional grid."""
+    # Gradient background
+    for y in range(height):
+        # Top color to bottom color interpolation (sky-like logic if you want but simple slate here)
+        r = int(245 - (y / height) * 20)
+        g = int(247 - (y / height) * 20)
+        b = int(250 - (y / height) * 15)
+        pygame.draw.line(surface, (r, g, b), (0, y), (width, y))
+
+    # Grid Lines (1 meter intervals)
+    
+    grid_color = (200, 210, 220)
+    # Vertical lines
+    for x in range(0, width, PIXELS_PER_METER):
+        pygame.draw.line(surface, grid_color, (x, 0), (x, height))
+    # Horizontal lines
+    for y in range(height, 0, -PIXELS_PER_METER):
+        pygame.draw.line(surface, grid_color, (0, y), (width, y))
 
 #MAIN LOOP
 def run_simulation(queue=None):
@@ -259,6 +300,12 @@ def run_simulation(queue=None):
         bean.update(dt)   
 
         screen.fill(WHITE)
+        draw_background(screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+        # Draw a solid ground floor slightly more prominent
+        floor_rect = pygame.Rect(0, SCREEN_HEIGHT - 2, SCREEN_WIDTH, 2)
+        pygame.draw.rect(screen, (100, 150, 200), floor_rect)
+
         bean.draw(screen)
         draw_velocity_vector(screen, bean)
         draw_suvat_overlay(screen, font, bean.physics)
