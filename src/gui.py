@@ -232,10 +232,12 @@ class Bean_Can:
         self.Gravity.set(value)
         self.gravity_display.set(value)
         self.gravity.set(value)
+        self.on_Submit_click()
     def set_Mass_value(self, value):
         self.Mass.set(value)
         self.mass_display.set(value)
         self.mass.set(value)
+        self.on_Submit_click()
 
     def get_Gravity_value(self):
         return round(self.Gravity.get(), 2) # Round obtained values to 2dp
