@@ -44,6 +44,8 @@ class PhysicsBody:
         self.t = 0.0
         if not is_bounce:
             self.total_t = 0.0
+            self.vxmax = 0.0
+            self.vymax = 0.0
             
         self.sx = 0.0
         self.sy = 0.0
