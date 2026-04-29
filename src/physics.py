@@ -80,7 +80,15 @@ class PhysicsBody:
             self.vx = 0.0
             return
         self.release(vx_ms = self.vx, vy_ms = new_vy) #relaunch with the new velocities
+    def bounce_wall(self, restitution=0.6):
+        new_vx = -self.vx * restitution  # flip horizontal velocity
 
+        if abs(new_vx) < 0.3:
+            new_vx = 0.0  # kill tiny horizontal movement
+
+        # Relaunch preserving current vy, but with flipped vx
+        # vy must be recalculated for current moment since SUVAT tracks from launch
+        self.release(vx_ms=new_vx, vy_ms=self.vy)
 #-----------------------------------------------------------------
 
 def run_physics():

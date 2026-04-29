@@ -62,6 +62,18 @@ class BeanCan:
         if self.physics.y >= ground_y and self.physics.in_flight:
             self.physics.bounce(ground_y)
 
+        # --- Wall collisions ---
+        if self.physics.in_flight:
+            right_wall = self.screen_width - self.rect.width
+
+            if self.physics.x <= 0:
+                self.physics.x = 0.0
+                self.physics.bounce_wall()  # NEW: bounce horizontally
+
+            elif self.physics.x >= right_wall:
+                self.physics.x = float(right_wall)
+                self.physics.bounce_wall()
+
         # --- Keep settled can on the floor ---
         if self.physics.grounded:
             self.physics.y = float(ground_y)
