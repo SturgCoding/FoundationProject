@@ -88,7 +88,10 @@ class PhysicsBody:
         new_vy = -self.vy * restitution # flip vertical velocity
         self.vx *= 0.85 # apply some horizontal friction on bounce
 
-        if abs(new_vy) < 0.3 and abs(self.vx) < 0.3:
+        # Scale the stopping threshold with gravity to prevent jittering (micro-bounces) at high G's
+        stop_threshold_y = max(0.5, abs(self.ay) * 0.05)
+
+        if abs(new_vy) < stop_threshold_y and abs(self.vx) < 0.5:
             self.in_flight = False # if the bounce is really tiny, consider it at "rest"
             self.grounded = True
             self.vy = 0.0
