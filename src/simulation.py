@@ -213,6 +213,7 @@ def draw_suvat_overlay(surface, font, physics):
         f"Disp (s): x={physics.sx:.2f}m, y={physics.sy:.2f}m",
         f"Init Vel (u): x={physics.ux:.2f}m/s, y={physics.uy:.2f}m/s",
         f"Final Vel (v): x={physics.vx:.2f}m/s, y={physics.vy:.2f}m/s",
+        f"Maximum Vel (v): x={physics.vxmax:.2f}m/s, y={physics.vymax:.2f}m/s",
         f"Accel (a): x={physics.ax:.2f}m/s², y={physics.ay:.2f}m/s²",
     ]
     
