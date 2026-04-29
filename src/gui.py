@@ -37,6 +37,7 @@ class Bean_Can:
 
         self.root.geometry(f"{width}x{height}") # Set TK Window to screen size
         self.root.resizable(True, True) # Width, Height resizable bool
+        self.root.attributes('-topmost', True) # Keep the GUI above the fullscreen Pygame window
         self.root.update_idletasks()
         # Create widgets
         self._create_widgets()

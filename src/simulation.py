@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.dirname(__file__))  # lets Python find physics.py ins
 from physics import PhysicsBody, PIXELS_PER_METER
 
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1920
+SCREEN_HEIGHT = 1080
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -119,9 +119,11 @@ class BeanCan:
                             if elapsed > 0.001:
                                 vx_px = (event.pos[0] - pos[0]) / elapsed
                                 vy_px = (event.pos[1] - pos[1]) / elapsed
+                    # Reduce dragging velocity impact so it doesn't shoot out of bounds too easily
+                    drag_dampening = 0.3
                     self.physics.release(
-                    vx_ms=vx_px / PIXELS_PER_METER,
-                    vy_ms=vy_px / PIXELS_PER_METER,
+                    vx_ms=(vx_px / PIXELS_PER_METER) * drag_dampening,
+                    vy_ms=(vy_px / PIXELS_PER_METER) * drag_dampening,
                     )
                     if self.physics.y == ground_y and self.physics.vy == 0:
                         time_used = pygame.time.get_ticks()/1000 - start
@@ -130,8 +132,20 @@ class BeanCan:
         elif event.type == pygame.MOUSEMOTION:
             if self.physics.grounded != True:
                 if self.dragging:
-                    self.rect.x = event.pos[0] + self.offset_x
-                    self.rect.y = event.pos[1] + self.offset_y
+                    new_x = event.pos[0] + self.offset_x
+                    new_y = event.pos[1] + self.offset_y
+                    
+                    # Clamp to screen bounds
+                    if new_x < 0: new_x = 0
+                    elif new_x > self.screen_width - self.rect.width:
+                        new_x = self.screen_width - self.rect.width
+                        
+                    if new_y < 0: new_y = 0
+                    elif new_y > self.screen_height - self.rect.height:
+                        new_y = self.screen_height - self.rect.height
+                    
+                    self.rect.x = new_x
+                    self.rect.y = new_y
                     self.physics.x = float(self.rect.x)
                     self.physics.y = float(self.rect.y)
                     # Record position snapshot for throw velocity estimation
@@ -209,7 +223,7 @@ def draw_suvat_overlay(surface, font, physics):
     """
     lines = [
         "--- SUVAT ---",
-        f"Time (t): {physics.t:.2f} s",
+        f"Time (t): {physics.total_t:.2f} s",
         f"Disp (s): x={physics.sx:.2f}m, y={physics.sy:.2f}m",
         f"Init Vel (u): x={physics.ux:.2f}m/s, y={physics.uy:.2f}m/s",
         f"Final Vel (v): x={physics.vx:.2f}m/s, y={physics.vy:.2f}m/s",
@@ -266,10 +280,8 @@ def run_simulation(queue=None):
     # queue receives gravity/mass updates from the tkinter window
     pygame.init()
 
-    SCREEN_WIDTH  = 800
-    SCREEN_HEIGHT = 600
-
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((0, 0), pygame.NOFRAME)
+    SCREEN_WIDTH, SCREEN_HEIGHT = screen.get_size()
     pygame.display.set_caption("gravity sim")
     icon = pygame.image.load(resource_path("assets/bean_can.png")).convert_alpha()
     pygame.display.set_icon(icon)
@@ -320,6 +332,9 @@ def run_simulation(queue=None):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
             bean.handle_event(event)
 
         bean.update(dt)   

@@ -23,7 +23,8 @@ class PhysicsBody:
         self.sx = 0.0 #horizontal displacement (from launch point)
         self.sy = 0.0 #vertical displacement (from launch point) 
 
-        self.t = 0.0 #time since launch
+        self.t = 0.0 #time since launch (resets on bounds)
+        self.total_t = 0.0 #total time in flight out of all bounces
 
         self._launch_x = float(x) #initial x position (launch point)
         self._launch_y = float(y) #initial y position (launch point)
@@ -34,13 +35,16 @@ class PhysicsBody:
         self.vymax = 0.0 # max vertical velocity
 
         #call this when you drop or throw the can, vxms and vyms are the velocities in m/s
-    def release(self, vx_ms = 0.0, vy_ms = 0.0):
+    def release(self, vx_ms = 0.0, vy_ms = 0.0, is_bounce=False):
         self.ux = vx_ms#launch velocisy, the "u" in suvat, it never changes 
         self.uy = vy_ms
         self.vx = vx_ms
         self.vy = vy_ms
 
         self.t = 0.0
+        if not is_bounce:
+            self.total_t = 0.0
+            
         self.sx = 0.0
         self.sy = 0.0
 
@@ -56,6 +60,8 @@ class PhysicsBody:
         if not self.in_flight:
             return #if it's not in the air, don't update physics
         self.t += dt #add the time
+        self.total_t += dt #add the total time for display
+
 
             #v = u + at (live)
         self.vx = self.ux + self.ax * self.t
@@ -87,7 +93,7 @@ class PhysicsBody:
             self.vy = 0.0
             self.vx = 0.0
             return
-        self.release(vx_ms = self.vx, vy_ms = new_vy) #relaunch with the new velocities
+        self.release(vx_ms = self.vx, vy_ms = new_vy, is_bounce=True) #relaunch with the new velocities
     def bounce_wall(self, restitution=0.6):
         new_vx = -self.vx * restitution  # flip horizontal velocity
 
@@ -96,7 +102,7 @@ class PhysicsBody:
 
         # Relaunch preserving current vy, but with flipped vx
         # vy must be recalculated for current moment since SUVAT tracks from launch
-        self.release(vx_ms=new_vx, vy_ms=self.vy)
+        self.release(vx_ms=new_vx, vy_ms=self.vy, is_bounce=True)
 #-----------------------------------------------------------------
 
 def run_physics():
