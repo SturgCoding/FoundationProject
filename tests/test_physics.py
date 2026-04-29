@@ -64,7 +64,7 @@ class TestPhysicsBody(unittest.TestCase):
 
     def test_bounce_settle(self):
         """Test that the body comes to rest if a bounce has very low velocity."""
-        self.body.release(vx_ms=2.0, vy_ms=0.4)
+        self.body.release(vx_ms=0.1, vy_ms=0.4)
         self.body.bounce(ground_y_px=500, restitution=0.5)
         # new_vy = -0.4 * 0.5 = -0.2 (abs < 0.3)
         self.assertFalse(self.body.in_flight)

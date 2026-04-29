@@ -86,18 +86,15 @@ class PhysicsBody:
         self.y = float(ground_y_px) # make the can be on the ground, not fall through
             
         new_vy = -self.vy * restitution # flip vertical velocity
-        # Apply horizontal friction on ground impacts
-        self.vx *= 0.85
+        self.vx *= 0.85 # apply some horizontal friction on bounce
 
-        # Dynamic bounce threshold scaling with gravity to prevent infinite micro-bounces (moonwalking)
-        bounce_threshold = max(0.3, abs(self.ay) * 0.04)
-
-        if abs(new_vy) < bounce_threshold:
+        if abs(new_vy) < 0.3 and abs(self.vx) < 0.3:
             self.in_flight = False # if the bounce is really tiny, consider it at "rest"
             self.grounded = True
             self.vy = 0.0
             self.vx = 0.0
             return
+            
         self.release(vx_ms = self.vx, vy_ms = new_vy, is_bounce=True) #relaunch with the new velocities
     def bounce_wall(self, restitution=0.6):
         new_vx = -self.vx * restitution  # flip horizontal velocity
