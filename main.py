@@ -1,7 +1,3 @@
-#########################################
-# USE auto-py-to-exe TO CREATE .exe file
-# https://pypi.org/project/auto-py-to-exe/
-#########################################
 """
     File: main.py
     Project: Foundation-CompApps
@@ -27,7 +23,7 @@ if __name__ == "__main__":
     gui_process.start()
     simulation_process.start()
 
-    #close both apps simultaniously
+    #close both apps simultaneously
     while True:
         if not gui_process.is_alive():
             simulation_process.terminate()

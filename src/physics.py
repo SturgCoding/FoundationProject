@@ -30,6 +30,8 @@ class PhysicsBody:
 
         self.in_flight = False # is it in the air or not
         self.grounded = False # is it on the ground or not
+        self.vxmax = 0.0 # max horizontal velocity
+        self.vymax = 0.0 # max vertical velocity
 
         #call this when you drop or throw the can, vxms and vyms are the velocities in m/s
     def release(self, vx_ms = 0.0, vy_ms = 0.0):
@@ -66,6 +68,12 @@ class PhysicsBody:
 
         self.x = self._launch_x + self.sx * PIXELS_PER_METER #convert from meters to pixels
         self.y = self._launch_y + self.sy * PIXELS_PER_METER
+
+        # Update maximum velocities
+        if abs(self.vx) > self.vxmax:
+            self.vxmax = abs(self.vx)
+        if abs(self.vy) > self.vymax:
+            self.vymax = abs(self.vy)
 
     def bounce(self, ground_y_px, restitution = 0.6):
         #i put the restituion at .6 because it both looks good and seems logical, a bean bag is about 0.2 and a tennis ball is 0.75

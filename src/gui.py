@@ -6,9 +6,21 @@
 """
 
 
+import os
+import sys
 import tkinter as tk
 import customtkinter as ctk
 import multiprocessing as mp
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class Bean_Can:
     def __init__(self, root, queue = None):
@@ -280,6 +292,10 @@ class Bean_Can:
 def run_gui(queue=None):
     # queue is passed in from main.py so tkinter can send values to the simulation
     root = tk.Tk()
+    try:
+        root.iconbitmap(resource_path("assets/favicon.ico"))
+    except Exception:
+        pass
     app = Bean_Can(root, queue=queue)
     root.mainloop()
 
