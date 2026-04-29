@@ -16,9 +16,21 @@ from physics import PhysicsBody, PIXELS_PER_METER
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        # If not running as a bundle, use the project root
+        # Since this file is in src/, we go one level up to find assets/
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    return os.path.join(base_path, relative_path)
+
 class BeanCan:
     def __init__(self, x, y, screen_width, screen_height):
-        self.original_image = pygame.image.load("assets/bean_can.png").convert_alpha()
+        self.original_image = pygame.image.load(resource_path("assets/bean_can.png")).convert_alpha()
         self.image = pygame.transform.scale(self.original_image, (60, 100))
         self.rect  = self.image.get_rect()
         self.rect.x = int(x)
@@ -246,7 +258,7 @@ def run_simulation(queue=None):
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("gravity sim")
-    icon = pygame.image.load("assets/bean_can.png").convert_alpha()
+    icon = pygame.image.load(resource_path("assets/bean_can.png")).convert_alpha()
     pygame.display.set_icon(icon)
 
     WHITE = (255, 255, 255)
