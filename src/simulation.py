@@ -31,7 +31,7 @@ def resource_path(relative_path):
 class BeanCan:
     def __init__(self, x, y, screen_width, screen_height):
         self.original_image = pygame.image.load(resource_path("assets/bean_can.png")).convert_alpha()
-        self.image = pygame.transform.scale(self.original_image, (60, 100))
+        self.image = pygame.transform.scale(self.original_image, (40, 60))
         self.rect  = self.image.get_rect()
         self.rect.x = int(x)
         self.rect.y = int(y)
@@ -132,7 +132,7 @@ class BeanCan:
     #load the bean can
 
 
-def draw_arrow(surface, colour, start, end, width = 2, head = 10):
+def draw_arrow(surface, colour, start, end, width = 2, head = 8):
     if width <= 0: return
     pygame.draw.line(surface, colour, start, end, width)
 
@@ -178,7 +178,7 @@ def draw_velocity_vector(surface, bean_can):
         draw_arrow(surface, (80, 120, 255),
                      (cx, cy),
                      (cx + vx * SCALE, cy),
-                     width=3, head=12)
+                     width=3, head=10)
 #vertical arrow(velocity)
     if abs(vy) > 0.1:
         draw_arrow(surface, (255,80, 80),
